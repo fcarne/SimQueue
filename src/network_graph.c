@@ -20,7 +20,7 @@ network_graph::~network_graph() {
 bool network_graph::check() {
 	for (auto const &b : buffers_map) {
 		if (!b.second->is_valid()) {
-			fprintf(stderr, "Buffer %s probabilities do not add up 1\n",
+			fprintf(stderr, "Buffer %s probabilities do not add up to 1",
 					b.first.c_str());
 			return false;
 		}
