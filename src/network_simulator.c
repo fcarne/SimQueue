@@ -61,7 +61,8 @@ void network_simulator::input() {
 	NRUNmin = read_int(" Simulation number of RUNs", 5, 2, 100);
 
 	printf("\nNETWORK TOPOLOGY:\n");
-	auto filename = read_string(" Network topology file path");
+	auto filename = read_string(" Network topology file path",
+			"./topology.txt");
 	network = network_graph::parse(filename);
 }
 
@@ -168,8 +169,12 @@ void network_simulator::update_stats() {
 			*delay += b->tot_delay / b->tot_packs;
 	}
 
-	auto exit_connected_buffers = network->get_exit_connected_buffers();
+	printf("Tot_Transfer: %lf. Tot_Packet: %lf. Mean_transfer: %lf\n",
+			network->tot_transfer, network->tot_packets,
+			network->tot_transfer / network->tot_packets);
+
 	if (network->tot_packets > 0)
 		*transfer_time += network->tot_transfer / network->tot_packets;
+
 }
 

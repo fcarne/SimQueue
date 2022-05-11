@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+.settings/language.settings.xml
+.cproject
+.project
+.settings/org.eclipse.cdt.codan.core.prefs
+.settings/org.eclipse.cdt.core.prefs
+.settings/org.eclipse.cdt.managedbuilder.core.prefs

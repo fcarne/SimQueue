@@ -18,13 +18,20 @@ network_graph::~network_graph() {
 }
 
 bool network_graph::check() {
-	for (auto b : buffers) {
-		if (!b->is_valid())
+	for (auto const &b : buffers_map) {
+		if (!b.second->is_valid()) {
+			fprintf(stderr, "Buffer %s probabilities do not add up 1\n",
+					b.first.c_str());
 			return false;
+		}
 	}
 
-	return get_entry_buffers().size() > 0
-			&& get_exit_connected_buffers().size() > 0;
+	if (entry_buffers.size() == 0)
+		fprintf(stderr, "There are no entry buffers");
+	if (exit_connected_buffers.size() == 0)
+		fprintf(stderr, "There are no buffers connected to the outside");
+
+	return entry_buffers.size() > 0 && exit_connected_buffers.size() > 0;
 }
 
 network_graph* network_graph::parse(std::string filename) {
@@ -67,7 +74,7 @@ network_graph* network_graph::parse(std::string filename) {
 	}
 
 	if (!network->check()) {
-		fprintf(stderr, "Network is not valid!");
+		fprintf(stderr, " - Parsed network is invalid!\n");
 		exit(-1);
 	}
 
