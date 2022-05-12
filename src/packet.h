@@ -32,7 +32,6 @@ inline packet::packet(double Gen_time) {
 
 class network_packet: public packet {
 	long length;
-	//network_packet *next;
 public:
 	double arrival_time;
 	network_packet(double gen_time, long length) :

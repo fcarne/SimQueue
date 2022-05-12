@@ -117,15 +117,15 @@ void network_simulator::results() {
 	fprintf(fpout, "           SIMULATION RESULTS                \n");
 	fprintf(fpout, "*********************************************\n\n");
 	fprintf(fpout, "Input parameters:\n");
-	fprintf(fpout, "Transient length (s)         %5.3f\n", Trslen);
-	fprintf(fpout, "Run length (s)               %5.3f\n", Runlen);
-	fprintf(fpout, "Number of runs               %5d\n", NRUNmin);
-	fprintf(fpout, "Packet inter-arrival time	 %5.3f\n", inter);
-	fprintf(fpout, "Average packet length		 %5ld\n", L);
+	fprintf(fpout, "Transient length (s)        %12.3f\n", Trslen);
+	fprintf(fpout, "Run length (s)              %12.3f\n", Runlen);
+	fprintf(fpout, "Number of runs              %12d\n", NRUNmin);
+	fprintf(fpout, "Packet inter-arrival time   %12.3f\n", inter);
+	fprintf(fpout, "Average packet length       %12ld\n", L);
 	fprintf(fpout, "Results:\n");
-	fprintf(fpout, "Average Delay                %2.6f   +/- %.2e  p:%3.2f\n",
+	fprintf(fpout, "Average Delay               %12.6f   +/- %.2e  p:%6.2f\n",
 			delay->mean(), delay->confidence(.95), delay->confpercerr(.95));
-	fprintf(fpout, "Average Transfer Time        %4.6f   +/- %.2e  p:%3.2f\n",
+	fprintf(fpout, "Average Transfer Time       %12.6f   +/- %.2e  p:%6.2f\n",
 			transfer_time->mean(), transfer_time->confidence(.95),
 			transfer_time->confpercerr(.95));
 	//TODO: add theoretical results
@@ -168,10 +168,6 @@ void network_simulator::update_stats() {
 		if (b->tot_packs > 0)
 			*delay += b->tot_delay / b->tot_packs;
 	}
-
-	printf("Tot_Transfer: %lf. Tot_Packet: %lf. Mean_transfer: %lf\n",
-			network->tot_transfer, network->tot_packets,
-			network->tot_transfer / network->tot_packets);
 
 	if (network->tot_packets > 0)
 		*transfer_time += network->tot_transfer / network->tot_packets;
