@@ -81,8 +81,8 @@ void network_arrival::body() {
 	}
 	// otherwise let the packet get in the service
 	else {
-		buf->tot_packs += 1.0;
-		double t_transfer = pack->get_transfer_time(buf->get_capacity());
+		//buf->tot_packs += 1.0;
+		double t_transfer = buf->get_transfer_time(pack->get_length());
 		ev = new network_transfer(time + t_transfer, pack, buf);
 		cal->put(ev);
 		buf->status = 1;
@@ -107,17 +107,23 @@ void network_transfer::body() {
 	network_buffer *next_buf = (network_buffer*) connected[i].buf;
 
 	pack->arrival_time = time;
-	if (next_buf == &network_buffer::EXIT) {
+	if (next_buf == network_buffer::EXIT) {
 		network->tot_packets += 1;
 		network->tot_transfer += time - pack->get_time();
+
 		delete pack;
 	} else {
 		if (next_buf->full() || next_buf->status) {
 			next_buf->insert(pack);
 		} else {
-			next_buf->tot_packs += 1.0;
-			double t_transfer = pack->get_transfer_time(
-					next_buf->get_capacity());
+			//next_buf->tot_packs += 1.0;
+
+			long l;
+			extern long L;
+			GEN_EXP_INT(SEED, L, l);
+
+			double t_transfer = next_buf->get_transfer_time(pack->get_length());
+
 			event *ev = new network_transfer(time + t_transfer, pack, next_buf);
 			cal->put(ev);
 			next_buf->status = 1;
@@ -128,11 +134,16 @@ void network_transfer::body() {
 	network_packet *next_pack;
 	next_pack = (network_packet*) buf->get();
 	if (next_pack != NULL) {
-		double t_transfer = next_pack->get_transfer_time(buf->get_capacity());
+
+		long l;
+		extern long L;
+		GEN_EXP_INT(SEED, L, l);
+
+		double t_transfer = buf->get_transfer_time(next_pack->get_length());
 		event *ev = new network_transfer(time + t_transfer, next_pack, buf);
 		cal->put(ev);
-		buf->tot_delay += time - next_pack->arrival_time;
-		buf->tot_packs += 1.0;
+		//buf->tot_delay += time - next_pack->arrival_time;
+		//buf->tot_packs += 1.0;
 	} else
 		buf->status = 0;
 }

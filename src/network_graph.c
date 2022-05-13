@@ -6,6 +6,8 @@
 #include "network_graph.h"
 #include <cstring>
 #include <cstdio>
+#include <algorithm>
+#include <cerrno>
 
 network_graph::network_graph() {
 	tot_packets = 0.0;
@@ -55,7 +57,7 @@ network_graph* network_graph::parse(std::string filename) {
 				sscanf(buf, "%[^->]->%[^:]: %lf", from, to, &p);
 				if (strcmp(to, "EXIT") == 0) {
 					network->set_exit_connected(from);
-					network->add_connection(from, { &network_buffer::EXIT, p });
+					network->add_connection(from, { network_buffer::EXIT, p });
 				} else
 					network->add_connection(from, to, p);
 			} else if (strstr(buf, "ENTRY: ")) {
@@ -118,4 +120,38 @@ const std::vector<network_buffer*> network_graph::get_entry_buffers() {
 }
 const std::vector<network_buffer*> network_graph::get_exit_connected_buffers() {
 	return exit_connected_buffers;
+}
+
+void network_graph::serialize(const char *prob_filename,
+		const char *node_filename) {
+
+	extern double inter;
+	extern long L;
+
+	std::unordered_map<network_buffer*, int> buffers_idx;
+	for (size_t i = 0; i < buffers.size(); ++i) {
+		buffers_idx[buffers[i]] = i + 1;
+	}
+
+	FILE *f_prob = fopen64(prob_filename, "w");
+	FILE *f_node = fopen64(node_filename, "w");
+
+	for (auto b : buffers) {
+		int idx = buffers_idx[b];
+		fprintf(f_prob, "%d %d %d\n", idx, idx, 1);
+		for (auto n : b->get_connected()) {
+			if (n.buf == network_buffer::EXIT)
+				continue;
+
+			fprintf(f_prob, "%d %d %lf\n", buffers_idx[(network_buffer*) n.buf],
+					idx, -n.prob);
+		}
+		fprintf(f_node, "%lf %lf\n",
+				std::find(entry_buffers.begin(), entry_buffers.end(), b)
+						!= entry_buffers.end() ? 1 / inter : 0,
+				b->get_capacity() / (double) L);
+	}
+
+	fclose(f_prob);
+	fclose(f_node);
 }

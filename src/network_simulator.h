@@ -16,10 +16,9 @@
 
 class network_simulator: public simulator {
 	int traffic_model;
-	//double load;
+	double gamma;
 	int service_model;
 	// statistics
-	Sstat *delay;
 	Sstat *transfer_time;
 	Sstat *execution_time;
 

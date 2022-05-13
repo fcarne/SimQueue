@@ -33,11 +33,13 @@ public:
 	const std::vector<network_buffer*> get_entry_buffers();
 	const std::vector<network_buffer*> get_exit_connected_buffers();
 
+	void serialize(const char*, const char*);
+
 	void to_string() {
 		for (auto b : buffers) {
 			printf("%p: %ld -> { ", b, b->get_capacity());
 			for (auto &e : b->get_connected()) {
-				if (e.buf == &network_buffer::EXIT) {
+				if (e.buf == network_buffer::EXIT) {
 					printf("(EXIT, %lf), ", e.prob);
 				} else {
 					printf("(%p, %lf), ", e.buf, e.prob);

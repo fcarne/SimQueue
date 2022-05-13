@@ -44,7 +44,7 @@ class network_buffer: public buffer {
 	long capacity;
 	std::vector<edge> connected;
 public:
-	static const network_buffer EXIT;
+	static const network_buffer *EXIT;
 
 	network_buffer(long capacity) :
 			capacity(capacity) {
@@ -60,6 +60,11 @@ public:
 
 	long get_capacity() {
 		return capacity;
+	}
+
+	double get_transfer_time(long length) {
+		double t_transfer = length / (double) capacity;
+		return t_transfer;
 	}
 
 	bool is_valid() {

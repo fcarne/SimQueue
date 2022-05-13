@@ -43,10 +43,6 @@ public:
 		return length;
 	}
 
-	double get_transfer_time(long capacity) {
-		double t_transfer = length / (double) capacity;
-		return t_transfer;
-	}
 };
 
 #endif

@@ -4,6 +4,7 @@
  *******************************************************/
 #include "global.h"
 #include <stdio.h>
+#include <filesystem>
 #include "network_simulator.h"
 #include "rand.h"
 #include "buffer.h"
@@ -28,15 +29,14 @@ network_simulator::network_simulator(int argc, char *argv[]) :
 
 	network = NULL;
 
-	delay = new Sstat();
 	transfer_time = new Sstat();
 	execution_time = new Sstat();
 
 	traffic_model = service_model = 0;
+	gamma = 0;
 }
 
 network_simulator::~network_simulator() {
-	delete delay;
 	delete transfer_time;
 	delete execution_time;
 
@@ -49,7 +49,8 @@ void network_simulator::input() {
 	printf(" Arrivals model:\n");
 	printf("  1 - Poisson\n");
 	traffic_model = read_digit("  Selected model", 1, 1, 1);
-	inter = read_double(" Average inter-arrival time (s)", 0.4, 0.01, 100);
+	gamma = read_double(" Offered traffic per node (pck/s)", 1, 0.01, 1000);
+	inter = 1/gamma;
 	printf("\n");
 	printf(" Service model:\n");
 	printf("  1 - Exponential\n");
@@ -120,15 +121,20 @@ void network_simulator::results() {
 	fprintf(fpout, "Transient length (s)        %12.3f\n", Trslen);
 	fprintf(fpout, "Run length (s)              %12.3f\n", Runlen);
 	fprintf(fpout, "Number of runs              %12d\n", NRUNmin);
-	fprintf(fpout, "Packet inter-arrival time   %12.3f\n", inter);
+	fprintf(fpout, "Offered traffic per node    %12.3f\n", gamma);
 	fprintf(fpout, "Average packet length       %12ld\n", L);
 	fprintf(fpout, "Results:\n");
-	fprintf(fpout, "Average Delay               %12.6f   +/- %.2e  p:%6.2f\n",
-			delay->mean(), delay->confidence(.95), delay->confpercerr(.95));
 	fprintf(fpout, "Average Transfer Time       %12.6f   +/- %.2e  p:%6.2f\n",
 			transfer_time->mean(), transfer_time->confidence(.95),
 			transfer_time->confpercerr(.95));
 	//TODO: add theoretical results
+	std::filesystem::create_directory("./analysis");
+	network->serialize("./analysis/q_matrix.dat",
+			"./analysis/node_info.dat");
+	std::filesystem::path script_path = "./qos.m";
+	fprintf(fpout,
+			"\nTheoretical results can be computed using the MATLAB script at: \n%ls",
+			std::filesystem::absolute(script_path).c_str());
 }
 
 void network_simulator::print_trace(int n) {
@@ -136,9 +142,7 @@ void network_simulator::print_trace(int n) {
 	fprintf(fptrc, "                 TRACE RUN %d                \n", n);
 	fprintf(fptrc, "*********************************************\n\n");
 
-	fprintf(fptrc, "Average Delay                %2.6f   +/- %.2e  p:%3.2f\n",
-			delay->mean(), delay->confidence(.95), delay->confpercerr(.95));
-	fprintf(fptrc, "Average Transfer Time        %4.6f   +/- %.2e  p:%3.2f\n",
+	fprintf(fptrc, "Average Transfer Time       %12.6f   +/- %.2e  p:%6.2f\n",
 			transfer_time->mean(), transfer_time->confidence(.95),
 			transfer_time->confpercerr(.95));
 
@@ -157,20 +161,12 @@ void network_simulator::clear_counters() {
 }
 
 void network_simulator::clear_stats() {
-	delay->reset();
 	transfer_time->reset();
 	execution_time->reset();
 }
 
 void network_simulator::update_stats() {
-	auto buffers = network->get_buffers();
-	for (auto b : buffers) {
-		if (b->tot_packs > 0)
-			*delay += b->tot_delay / b->tot_packs;
-	}
-
 	if (network->tot_packets > 0)
 		*transfer_time += network->tot_transfer / network->tot_packets;
-
 }
 
