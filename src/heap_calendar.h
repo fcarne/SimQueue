@@ -2,12 +2,12 @@
  CALENDAR HEAP H
  *******************************************************/
 
-#ifndef CALENDAR_HEAP_H_
-#define CALENDAR_HEAP_H_
+#ifndef HEAP_CALENDAR_H_
+#define HEAP_CALENDAR_H_
 
 #include "calendar.h"
 
-class calendar_heap: public calendar {
+class heap_calendar: public calendar {
 	static const int INIT_CAPACITY;
 
 	event **heap;
@@ -15,8 +15,8 @@ class calendar_heap: public calendar {
 	int heap_size;
 
 public:
-	calendar_heap();
-	virtual ~calendar_heap();
+	heap_calendar();
+	virtual ~heap_calendar();
 
 	virtual event* get();
 	virtual void put(event *New_event);
@@ -48,16 +48,16 @@ private:
 
 };
 
-inline calendar_heap::calendar_heap() {
+inline heap_calendar::heap_calendar() {
 	capacity = INIT_CAPACITY;
 	heap_size = 0;
 	heap = new event*[capacity];
 }
 
-inline calendar_heap::~calendar_heap() {
+inline heap_calendar::~heap_calendar() {
 	for (int i = 0; i < heap_size; i++) {
 		delete heap[i];
 	}
 }
 
-#endif /* CALENDAR_HEAP_H_ */
+#endif /* HEAP_CALENDAR_H_ */

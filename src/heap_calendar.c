@@ -4,12 +4,12 @@
  *******************************************************/
 
 #include "global.h"
-#include "calendar_heap.h"
 #include <stdlib.h>
+#include "heap_calendar.h"
 
-const int calendar_heap::INIT_CAPACITY = 64;
+const int heap_calendar::INIT_CAPACITY = 64;
 
-event* calendar_heap::get() {
+event* heap_calendar::get() {
 	if (heap_size <= 0)
 		return NULL;
 
@@ -28,7 +28,7 @@ event* calendar_heap::get() {
 	return ev;
 }
 
-void calendar_heap::put(event *New_event) {
+void heap_calendar::put(event *New_event) {
 	if (heap_size == capacity) {
 		capacity *= 2;
 		heap = (event**) realloc(heap, capacity * sizeof(event*));
@@ -46,7 +46,7 @@ void calendar_heap::put(event *New_event) {
 	}
 }
 
-void calendar_heap::heapify(int i) {
+void heap_calendar::heapify(int i) {
 	int l = left(i);
 	int r = right(i);
 	int smallest = i;

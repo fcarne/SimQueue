@@ -7,25 +7,25 @@
 
 #include "calendar.h"
 
-class calendar_linked: public calendar {
+class linked_calendar: public calendar {
 
 	event *head;
 	event *last;
 
 public:
-	calendar_linked();
-	virtual ~calendar_linked();
+	linked_calendar();
+	virtual ~linked_calendar();
 
 	virtual event* get();
 	virtual void put(event *New_event);
 };
 
-inline calendar_linked::calendar_linked() {
+inline linked_calendar::linked_calendar() {
 	head = NULL;
 	last = NULL;
 }
 
-inline calendar_linked::~calendar_linked() {
+inline linked_calendar::~linked_calendar() {
 	event *temp = head;
 	last->next = NULL;
 	while (temp != NULL) {

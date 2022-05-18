@@ -9,9 +9,9 @@
 #include "buffer.h"
 #include "event.h"
 #include "calendar.h"
-#include "calendar_linked.h"
-#include "calendar_heap.h"
 #include "easyio.h"
+#include "heap_calendar.h"
+#include "linked_calendar.h"
 
 calendar *cal;		// events calendar
 double inter;
@@ -23,7 +23,7 @@ int NRUNmax;
 
 queue::queue(int argc, char *argv[]) :
 		simulator(argc, argv) {
-	cal = new calendar_linked();
+	cal = new linked_calendar();
 	buf = new buffer();
 	delay = new Sstat();
 

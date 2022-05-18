@@ -19,7 +19,7 @@ public:
 	virtual ~event() {
 	}
 
-	virtual void body() = 0;
+	virtual void body() {};
 };
 
 inline event::event() {
