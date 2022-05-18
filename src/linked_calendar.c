@@ -4,9 +4,9 @@
  *******************************************************/
 
 #include "global.h"
-#include "calendar_linked.h"
+#include "linked_calendar.h"
 
-event* calendar_linked::get() {
+event* linked_calendar::get() {
 
 	if (head == NULL)
 		return NULL;
@@ -23,7 +23,7 @@ event* calendar_linked::get() {
 	return ev;
 }
 
-void calendar_linked::put(event *New) {
+void linked_calendar::put(event *New) {
 	event *temp = head;
 
 	if (head == NULL) {

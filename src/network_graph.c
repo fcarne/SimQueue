@@ -55,14 +55,14 @@ network_graph* network_graph::parse(std::string filename) {
 				double p = 0;
 
 				sscanf(buf, "%[^->]->%[^:]: %lf", from, to, &p);
-				if (strcmp(to, "EXIT") == 0) {
+				if (strcmp(to, "OUT") == 0) {
 					network->set_exit_connected(from);
-					network->add_connection(from, { network_buffer::EXIT, p });
+					network->add_connection(from, { network_buffer::OUT, p });
 				} else
 					network->add_connection(from, to, p);
-			} else if (strstr(buf, "ENTRY: ")) {
+			} else if (strstr(buf, "IN: ")) {
 				char id[10];
-				sscanf(buf, "ENTRY: %s", id);
+				sscanf(buf, "IN: %s", id);
 				network->set_entry(id);
 			} else {
 				fprintf(stdout, "skip line\n");
@@ -140,7 +140,7 @@ void network_graph::serialize(const char *prob_filename,
 		int idx = buffers_idx[b];
 		fprintf(f_prob, "%d %d %d\n", idx, idx, 1);
 		for (auto n : b->get_connected()) {
-			if (n.buf == network_buffer::EXIT)
+			if (n.buf == network_buffer::OUT)
 				continue;
 
 			fprintf(f_prob, "%d %d %lf\n", buffers_idx[(network_buffer*) n.buf],

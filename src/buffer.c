@@ -41,4 +41,4 @@ packet* buffer::get() {
 	return pack;
 }
 
-const network_buffer* network_buffer::EXIT = new network_buffer(0);
+const network_buffer* network_buffer::OUT = new network_buffer(0);

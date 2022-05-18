@@ -1,3 +1,4 @@
+%% Theoritical results analysis
 % DO NOT MOVE
 load analysis\q_matrix.dat;
 load analysis\node_info.dat;
@@ -11,7 +12,8 @@ gamma = full(sum(traffic));
 
 T = 1 / gamma * sum(lambda ./ (mu - lambda ));
 
-file = input("Select the output file (press Enter if absent):");
+file = input('Select the output file (press Enter if absent): ');
+
 if isempty(file) 
     fid = 1;
 else

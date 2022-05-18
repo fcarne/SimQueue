@@ -39,7 +39,7 @@ public:
 		for (auto b : buffers) {
 			printf("%p: %ld -> { ", b, b->get_capacity());
 			for (auto &e : b->get_connected()) {
-				if (e.buf == network_buffer::EXIT) {
+				if (e.buf == network_buffer::OUT) {
 					printf("(EXIT, %lf), ", e.prob);
 				} else {
 					printf("(%p, %lf), ", e.buf, e.prob);

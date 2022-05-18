@@ -4,21 +4,15 @@
 #ifndef _NETWORK_SIMULATOR_H
 #define _NETWORK_SIMULATOR_H
 
-#include <vector>
-
 #include "simulator.h"
-#include "calendar.h"
-#include "event.h"
-#include "buffer.h"
-#include "packet.h"
 #include "stat.h"
-#include "network_graph.h"
 
 class network_simulator: public simulator {
 	int traffic_model;
 	double gamma;
 	int service_model;
 	// statistics
+	double run_sim_time;
 	Sstat *transfer_time;
 	Sstat *execution_time;
 
