@@ -1,5 +1,5 @@
 /*******************************************************
- G/G/1 NETWORK SIMULATOR
+ C5 Project extension - G/G/1 NETWORK SIMULATOR
  *******************************************************/
 #ifndef _NETWORK_SIMULATOR_H
 #define _NETWORK_SIMULATOR_H

@@ -1,5 +1,5 @@
 /*******************************************************
- CALENDAR HEAP H
+  C5 Project extension - HEAP_CALENDAR.H
  *******************************************************/
 
 #ifndef HEAP_CALENDAR_H_

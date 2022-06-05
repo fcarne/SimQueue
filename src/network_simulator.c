@@ -1,6 +1,6 @@
 /* -*- C++ -*- */
 /*******************************************************
- QUEUE.C
+  C5 Project extension - NETWORK_SIMULATOR.C
  *******************************************************/
 #include <stdio.h>
 #include <filesystem>
@@ -73,8 +73,8 @@ void network_simulator::input() {
 
 void network_simulator::init() {
 	input();
-	auto entries = network->get_entry_buffers();
-	for (auto b : entries) {
+	auto ingress = network->get_ingress_buffers();
+	for (auto b : ingress) {
 		event *ev = new network_arrival(TIME_START, b);
 		cal->put(ev);
 	}
@@ -140,7 +140,7 @@ void network_simulator::results() {
 	fprintf(fpout, "Average Run Time (ms)       %12.6f   +/- %.2e  p:%6.2f\n",
 				execution_time->mean(), execution_time->confidence(.95),
 				execution_time->confpercerr(.95));
-	//TODO: add theoretical results
+
 	std::filesystem::create_directory("./analysis");
 	network->serialize("./analysis/q_matrix.dat", "./analysis/node_info.dat");
 	std::filesystem::path script_path = std::filesystem::path("qos.m");

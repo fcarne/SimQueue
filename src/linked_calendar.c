@@ -1,6 +1,6 @@
 /* -*- C++ -*- */
 /*******************************************************
- CALENDAR LINKED C
+ LINKED_CALENDAR.C - Old Calendar implementation
  *******************************************************/
 
 #include "global.h"

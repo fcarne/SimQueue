@@ -1,5 +1,5 @@
 /*******************************************************
- NETWORK TOPOLOGY GRAPH
+ C5 Project extension - NETWORK TOPOLOGY GRAPH
  *******************************************************/
 #ifndef NETWORK_GRAPH_H_
 #define NETWORK_GRAPH_H_
@@ -12,8 +12,8 @@
 class network_graph {
 	std::unordered_map<std::string, network_buffer*> buffers_map;
 	std::vector<network_buffer*> buffers;
-	std::vector<network_buffer*> entry_buffers;
-	std::vector<network_buffer*> exit_connected_buffers;
+	std::vector<network_buffer*> ingress_buffers;
+	std::vector<network_buffer*> egress_buffers;
 
 	bool check();
 public:
@@ -27,11 +27,11 @@ public:
 	void add_buffer(std::string id, long capacity);
 	void add_connection(std::string from, edge e);
 	void add_connection(std::string from, std::string to, double p);
-	void set_entry(std::string id);
-	void set_exit_connected(std::string id);
+	void set_ingress(std::string id);
+	void set_egress(std::string id);
 	const std::vector<network_buffer*> get_buffers();
-	const std::vector<network_buffer*> get_entry_buffers();
-	const std::vector<network_buffer*> get_exit_connected_buffers();
+	const std::vector<network_buffer*> get_ingress_buffers();
+	const std::vector<network_buffer*> get_egress_buffers();
 
 	void serialize(const char*, const char*);
 

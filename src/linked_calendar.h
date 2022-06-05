@@ -1,5 +1,5 @@
 /*******************************************************
- CALENDAR LINKED H
+ LINKED_CALENDAR.H - Old Calendar implementation
  *******************************************************/
 
 #ifndef _CALENDAR_LINKED_H

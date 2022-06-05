@@ -1,6 +1,6 @@
 /* -*- C++ -*- */
 /*******************************************************
- NETWORK TOPOLOGY GRAPH
+ C5 Project extension - NETWORK TOPOLOGY GRAPH
  *******************************************************/
 
 #include "network_graph.h"
@@ -28,12 +28,12 @@ bool network_graph::check() {
 		}
 	}
 
-	if (entry_buffers.size() == 0)
-		fprintf(stderr, "There are no entry buffers");
-	if (exit_connected_buffers.size() == 0)
+	if (ingress_buffers.size() == 0)
+		fprintf(stderr, "There are no ingress buffers");
+	if (egress_buffers.size() == 0)
 		fprintf(stderr, "There are no buffers connected to the outside");
 
-	return entry_buffers.size() > 0 && exit_connected_buffers.size() > 0;
+	return ingress_buffers.size() > 0 && egress_buffers.size() > 0;
 }
 
 network_graph* network_graph::parse(std::string filename) {
@@ -56,14 +56,14 @@ network_graph* network_graph::parse(std::string filename) {
 
 				sscanf(buf, "%[^->]->%[^:]: %lf", from, to, &p);
 				if (strcmp(to, "OUT") == 0) {
-					network->set_exit_connected(from);
+					network->set_egress(from);
 					network->add_connection(from, { network_buffer::OUT, p });
 				} else
 					network->add_connection(from, to, p);
 			} else if (strstr(buf, "IN: ")) {
 				char id[10];
 				sscanf(buf, "IN: %s", id);
-				network->set_entry(id);
+				network->set_ingress(id);
 			} else {
 				fprintf(stdout, "skip line\n");
 			}
@@ -102,24 +102,21 @@ void network_graph::add_connection(std::string from, std::string to, double p) {
 		add_connection(from, { buffers_map[to], p });
 }
 
-void network_graph::set_entry(std::string id) {
+void network_graph::set_ingress(std::string id) {
 	if (buffers_map.find(id) != buffers_map.end())
-		entry_buffers.push_back(buffers_map[id]);
+		ingress_buffers.push_back(buffers_map[id]);
 }
 
-void network_graph::set_exit_connected(std::string id) {
+void network_graph::set_egress(std::string id) {
 	if (buffers_map.find(id) != buffers_map.end())
-		exit_connected_buffers.push_back(buffers_map[id]);
+		egress_buffers.push_back(buffers_map[id]);
 }
 
 const std::vector<network_buffer*> network_graph::get_buffers() {
 	return buffers;
 }
-const std::vector<network_buffer*> network_graph::get_entry_buffers() {
-	return entry_buffers;
-}
-const std::vector<network_buffer*> network_graph::get_exit_connected_buffers() {
-	return exit_connected_buffers;
+const std::vector<network_buffer*> network_graph::get_ingress_buffers() {
+	return ingress_buffers;
 }
 
 void network_graph::serialize(const char *prob_filename,
@@ -147,8 +144,8 @@ void network_graph::serialize(const char *prob_filename,
 					idx, -n.prob);
 		}
 		fprintf(f_node, "%lf %lf\n",
-				std::find(entry_buffers.begin(), entry_buffers.end(), b)
-						!= entry_buffers.end() ? 1 / inter : 0,
+				std::find(ingress_buffers.begin(), ingress_buffers.end(), b)
+						!= ingress_buffers.end() ? 1 / inter : 0,
 				b->get_capacity() / (double) L);
 	}
 

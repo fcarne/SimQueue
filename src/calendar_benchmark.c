@@ -1,4 +1,8 @@
 /* -*- C++ -*- */
+/*******************************************************
+ C5 Project extension - CALENDAR PUT/GET BENCHMARK
+ *******************************************************/
+
 #include "calendar_benchmark.h"
 
 #include <ctime>
@@ -25,17 +29,17 @@ void calendar_benchmark() {
 	calendar *cals[] = { new heap_calendar(), new linked_calendar() };
 
 	printf("\nBENCHMARK PARAMETERS:\n");
-	int Trslen = read_int(" Benchmark transient length (# of ops)", 1000, 100,
+	int Trslen = read_int(" Benchmark setup length (# of ops)", 1000, 100,
 			100000);
 	int Runlen = read_int(" Benchmark RUN length (# of ops)", 10000, 100,
 			100000);
-	int Nrun = read_int(" Benchmark number of RUNs", 5, 2, 100);
+	int Nrun = read_int(" Number of RUNs", 5, 2, 100);
 
 	printf("*********************************************\n");
 	printf("           BENCHMARK RESULTS                \n");
 	printf("*********************************************\n\n");
 	printf("Input parameters:\n");
-	printf("Transient length            %12d\n", Trslen);
+	printf("Setup length            	%12d\n", Trslen);
 	printf("Run length                  %12d\n", Runlen);
 	printf("Number of runs              %12d\n", Nrun);
 	printf("Results:\n");

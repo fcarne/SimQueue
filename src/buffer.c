@@ -41,4 +41,8 @@ packet* buffer::get() {
 	return pack;
 }
 
-const network_buffer* network_buffer::OUT = new network_buffer(0);
+/***************************************************************************
+ C5 Project extension - NETWORK BUFFER
+ ***************************************************************************/
+
+const network_buffer *network_buffer::OUT = new network_buffer(0);
