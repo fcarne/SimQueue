@@ -1,5 +1,8 @@
 %% Theoritical results analysis
 % DO NOT MOVE
+clear
+clc
+
 load analysis\q_matrix.dat;
 load analysis\node_info.dat;
 
