@@ -164,11 +164,11 @@ void network_simulator::print_trace(int n) {
 }
 
 void network_simulator::clear_counters() {
-	auto buffers = network->get_buffers();
+	/*auto buffers = network->get_buffers();
 	for (auto b : buffers) {
 		b->tot_delay = 0;
 		b->tot_packs = 0;
-	}
+	}*/
 
 	network->tot_packets = 0;
 	network->tot_transfer = 0;

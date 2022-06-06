@@ -106,7 +106,7 @@ void network_transfer::body() {
 
 	network_buffer *next_buf = (network_buffer*) connected[i].buf;
 
-	pack->arrival_time = time;
+	//pack->arrival_time = time;
 	if (next_buf == network_buffer::OUT) {
 		network->tot_packets += 1;
 		network->tot_transfer += time - pack->get_time();

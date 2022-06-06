@@ -33,10 +33,10 @@ inline packet::packet(double Gen_time) {
 class network_packet: public packet {
 	long length;
 public:
-	double arrival_time;
+	//double arrival_time;
 	network_packet(double gen_time, long length) :
 			packet(gen_time), length(length) {
-		arrival_time = gen_time;
+		//arrival_time = gen_time;
 	}
 
 	long get_length() {
