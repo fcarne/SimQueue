@@ -146,7 +146,7 @@ void network_simulator::results() {
 	std::filesystem::path script_path = std::filesystem::path("qos.m");
 
 	fprintf(fpout,
-			"\nTheoretical results can be computed using the MATLAB script at: \n%s",
+			"\nTheoretical results can be computed using the MATLAB script at: \n%ls",
 			std::filesystem::absolute(script_path).c_str());
 }
 
