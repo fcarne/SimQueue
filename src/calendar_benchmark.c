@@ -16,6 +16,7 @@
 #include "rand.h"
 #include "event.h"
 
+// generate a random empty event
 event* generate_event() {
 	double t;
 	GEN_UNIF(SEED, 0, 10000, t);
@@ -28,6 +29,7 @@ void calendar_benchmark() {
 
 	calendar *cals[] = { new heap_calendar(), new linked_calendar() };
 
+	// setup benchmark
 	printf("\nBENCHMARK PARAMETERS:\n");
 	int Trslen = read_int(" Benchmark setup length (# of ops)", 1000, 100,
 			100000);
@@ -48,10 +50,12 @@ void calendar_benchmark() {
 		bench_put_time->reset();
 		bench_get_time->reset();
 
+		// setup calendar
 		for (int i = 0; i < Trslen; i++) {
 			cal->put(generate_event());
 		}
 
+		// put benchmark
 		for (int i = 0; i < Nrun; i++) {
 			clock_t begin = clock();
 			for (int j = 0; j < Runlen; j++) {
@@ -61,6 +65,7 @@ void calendar_benchmark() {
 			*bench_put_time += 1000 * (double) (end - begin) / CLOCKS_PER_SEC;
 		}
 
+		// get benchmark
 		for (int i = 0; i < Nrun; i++) {
 			clock_t begin = clock();
 			for (int j = 0; j < Runlen; j++)

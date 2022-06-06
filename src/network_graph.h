@@ -11,12 +11,13 @@
 
 class network_graph {
 	std::unordered_map<std::string, network_buffer*> buffers_map;
-	std::vector<network_buffer*> buffers;
+	std::vector<network_buffer*> buffers; // easier to mantain than to extract it from the map above
 	std::vector<network_buffer*> ingress_buffers;
 	std::vector<network_buffer*> egress_buffers;
 
-	bool check();
+	bool is_valid();
 public:
+	// stats
 	double tot_packets;
 	double tot_transfer;
 	network_graph();

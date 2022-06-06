@@ -36,14 +36,15 @@ public:
 class network_buffer;
 
 struct edge {
-	const network_buffer *buf;
-	double prob;
+	const network_buffer *buf; // next buffer
+	double prob; // probability of following this edge
 };
 
 class network_buffer: public buffer {
 	long capacity;
-	std::vector<edge> connected;
+	std::vector<edge> connected; // connections
 public:
+	// const pointer representing the rest of the world
 	static const network_buffer *OUT;
 
 	network_buffer(long capacity) :
@@ -62,11 +63,12 @@ public:
 		return capacity;
 	}
 
+	// computes the time necessary to a pack long length bits to be served by this buffer
 	double get_transfer_time(long length) {
-		double t_transfer = length / (double) capacity;
-		return t_transfer;
+		return length / (double) capacity;
 	}
 
+	// checks if the cumulative probability of the connections is equal to 1
 	bool is_valid() {
 		double cumulative = 0.0;
 		for (unsigned int i = 0; i < connected.size(); ++i) {

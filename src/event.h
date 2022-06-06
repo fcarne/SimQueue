@@ -63,6 +63,7 @@ public:
  C5 Project extension - NETWORK EVENTS
  ***************************************************************************/
 
+// packet arrival from the source
 class network_arrival: public event {
 	network_buffer *buf;
 public:
@@ -73,8 +74,9 @@ public:
 	virtual void body();
 };
 
+// packet transfer from one buffer to the next one
 class network_transfer: public event {
-	network_packet *pack;
+	network_packet *pack; // the packet to be transferred (simpler than passing around gen_time and length)
 	network_buffer *buf;
 public:
 	network_transfer(double time, network_packet *pack, network_buffer *buf) :

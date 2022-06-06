@@ -22,8 +22,8 @@ extern double Trslen;
 extern double Runlen;
 extern int NRUNmin;
 
-long L;
-network_graph *network;
+long L; // mean length of a packet
+network_graph *network; // the network to simulate
 double TIME_START = 0.0;
 
 network_simulator::network_simulator(int argc, char *argv[]) :
@@ -73,6 +73,7 @@ void network_simulator::input() {
 
 void network_simulator::init() {
 	input();
+	// add an arrival event for each of the ingress buffers
 	auto ingress = network->get_ingress_buffers();
 	for (auto b : ingress) {
 		event *ev = new network_arrival(TIME_START, b);
@@ -141,12 +142,14 @@ void network_simulator::results() {
 				execution_time->mean(), execution_time->confidence(.95),
 				execution_time->confpercerr(.95));
 
+
+	// generate the .dat file for the matlab script
 	std::filesystem::create_directory("./analysis");
 	network->serialize("./analysis/q_matrix.dat", "./analysis/node_info.dat");
 	std::filesystem::path script_path = std::filesystem::path("qos.m");
 
 	fprintf(fpout,
-			"\nTheoretical results can be computed using the MATLAB script at: \n%ls",
+			"\nTheoretical results can be computed using the MATLAB script at: \n%s\n",
 			std::filesystem::absolute(script_path).c_str());
 }
 

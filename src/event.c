@@ -70,6 +70,7 @@ void network_arrival::body() {
 	ev = new network_arrival(time + delta, buf);
 	cal->put(ev);
 
+	// generation of packet length
 	int length;
 	GEN_EXP_INT(SEED, L, length);
 
@@ -93,6 +94,7 @@ void network_transfer::body() {
 	extern network_graph *network;
 
 	// proceed with the transfer of this packet
+	// first select the next buffer
 	double u;
 	GEN_UNIF(SEED, 0, 1, u);
 
@@ -107,38 +109,34 @@ void network_transfer::body() {
 	network_buffer *next_buf = (network_buffer*) connected[i].buf;
 
 	//pack->arrival_time = time;
+
+	// if next buffer is the destination, update stats
 	if (next_buf == network_buffer::OUT) {
 		network->tot_packets += 1;
 		network->tot_transfer += time - pack->get_time();
 
 		delete pack;
-	} else {
+	}
+	// otherwise send the packet to the buffer
+	else {
+		// either queue the packet...
 		if (next_buf->full() || next_buf->status) {
 			next_buf->insert(pack);
-		} else {
+		}
+		// ... or if empty, start the service
+		else {
 			//next_buf->tot_packs += 1.0;
-
-			long l;
-			extern long L;
-			GEN_EXP_INT(SEED, L, l);
-
 			double t_transfer = next_buf->get_transfer_time(pack->get_length());
-
 			event *ev = new network_transfer(time + t_transfer, pack, next_buf);
 			cal->put(ev);
 			next_buf->status = 1;
 		}
 	}
 
-	// transfer of the next packet in this buffer
+	// start serving the next packet in this buffer
 	network_packet *next_pack;
 	next_pack = (network_packet*) buf->get();
 	if (next_pack != NULL) {
-
-		long l;
-		extern long L;
-		GEN_EXP_INT(SEED, L, l);
-
 		double t_transfer = buf->get_transfer_time(next_pack->get_length());
 		event *ev = new network_transfer(time + t_transfer, next_pack, buf);
 		cal->put(ev);

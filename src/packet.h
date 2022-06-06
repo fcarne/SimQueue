@@ -31,7 +31,7 @@ inline packet::packet(double Gen_time) {
  ***************************************************************************/
 
 class network_packet: public packet {
-	long length;
+	long length; // the length of the packet in bits
 public:
 	//double arrival_time;
 	network_packet(double gen_time, long length) :

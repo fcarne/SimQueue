@@ -1,5 +1,5 @@
 /*******************************************************
- CALENDAR.H - Edited
+ CALENDAR.H - Edited to be a pure abstract class
  *******************************************************/
 
 #ifndef _CALENDAR_H

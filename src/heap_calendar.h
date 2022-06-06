@@ -10,9 +10,9 @@
 class heap_calendar: public calendar {
 	static const int INIT_CAPACITY;
 
-	event **heap;
-	int capacity;
-	int heap_size;
+	event **heap; // dynamic array
+	int capacity; // maximum size of the heap
+	int heap_size;  // # of events actually stored
 
 public:
 	heap_calendar();
@@ -24,24 +24,29 @@ private:
 
 	void heapify(int i);
 
+	// swaps the contents of two pointers
 	void swap(event **e1, event **e2) {
 		event *temp = *e1;
 		*e1 = *e2;
 		*e2 = temp;
 	}
 
+	// the compare method needed to order the events in the calendar
 	int compare(event *e1, event *e2) {
 		return e1->time > e2->time ? 1 : -1;
 	}
 
+	// computes the index of the left child of the event stored at index i
 	int left(int i) {
 		return (2 * i + 1);
 	}
 
+	// computes the index of the right child of the event stored at index i
 	int right(int i) {
 		return (2 * i + 2);
 	}
 
+	// computes the index of the parent of the event stored at index i
 	int parent(int i) {
 		return (i - 1) / 2;
 	}
